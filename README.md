@@ -1,25 +1,56 @@
 Live Tiles plugin usage:
 ===============
-Source files
+
+To install using plugman
 ---
-liveTiles.js - plugin definition and js implementation
-LiveTiles.cs - native side implementation
-liveTilesExample.html- usage example
+	
+From plugin registry:
+	$ plugman install --project . --platform wp7|wp8 --plugin com.risingj.cordova.livetiles
 
-In your head
+From the repo:
+	$ plugman install --project . --platform wp7|wp8 --plugin https://github.com/purplecabbage/livetiles.git
+
+From a local clone:
+	$ plugman install --project . --platform wp7|wp8 --plugin #path_to_local_clone#
+
+To install using cordova-cli
 ---
 
-    [script type="text/javascript" charset="utf-8" src="liveTiles.js"][/script]
+
+   	
 
 
-Somewhere in your code 
+Somewhere in your code, after device ready has fired 
 ---
-
    
-    navigator.plugins.liveTiles.updateAppTile(success, fail,{title: 'title', image:'Images/appbar.next.rest.png', count: 5, backTitle: 'Back title', backContent:'Back side', backImage : 'Images/appbar.close.rest.png'});    
+ // Update the applications live tile
+    LiveTiles.updateAppTile(success, fail, { 
+    	title: 'title', 
+		image:'Images/appbar.next.rest.png', 
+		count: 5, 
+		backTitle: 'Back title', 
+		backContent:'Back side', 
+		backImage : 'Images/appbar.close.rest.png'
+	});    
 
-    navigator.plugins.liveTiles.createSecondaryTile(success, fail, { title: 'title', image: 'Images/appbar.save.rest.png', count: 5, secondaryTileUri: 'www/myPage.html',backTitle:'back'});
+// create a secondary tile
+    LiveTiles.createSecondaryTile(success, fail, { 
+	  title: 'title', 
+	  image: 'Images/appbar.save.rest.png', 
+	  count: 5, 
+	  secondaryTileUri: 'www/myPage.html',
+	  backTitle:'back' 
+	});
    
-    navigator.plugins.liveTiles.updateSecondaryTile(success, fail, { title: 'title', count: 5, secondaryTileUri: 'www/myPage.html' });
 
-    navigator.plugins.liveTiles.deleteSecondaryTile(success, fail, { secondaryTileUri: 'www/myPage.html' });
+// update the secondary tile
+    LiveTiles.updateSecondaryTile(success, fail, { 
+    	title: 'title', 
+    	count: 5, 
+    	secondaryTileUri: 'www/myPage.html' 
+    });
+
+// remove the secondary tile
+    LiveTiles.deleteSecondaryTile(success, fail, { 
+    	secondaryTileUri: 'www/myPage.html' 
+    });
