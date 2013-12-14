@@ -12,7 +12,7 @@
     <issue></issue>
 
     <js-module src="www/livetiles.js" name="livetiles">
-        <clobbers target="" />
+        <clobbers target="LiveTiles" />
     </js-module>
     
     <!-- android -->

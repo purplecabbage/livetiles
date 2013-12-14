@@ -1,43 +1,22 @@
 ﻿
 
-(function () {
+var exec = require('cordova/exec');
 
-    function checkArgs(win,fail) {
-        if(win && typeof win === "function" && fail && typeof fail === "function") {
-            return true;
-        }
-        else {
-            console.log("LiveTiles Error: successCallback || errorCallback is not a function");
-            return false;
-        }
+var emptyFunk = function(){};
+
+module.exports = {
+
+    updateAppTile: function (win, lose, options) {
+        exec(win || emptyFunk, lose || emptyFunk, "LiveTiles", "updateAppTile", [options]);
+    },
+    createSecondaryTile: function (win, lose, options) {
+        exec(win || emptyFunk, lose || emptyFunk, "LiveTiles", "createSecondaryTile", [options]);
+    },
+    updateSecondaryTile: function (win, lose, options) {
+        exec(win || emptyFunk, lose || emptyFunk, "LiveTiles", "updateSecondaryTile", [options]);
+    },
+    deleteSecondaryTile: function (win, lose, options) {
+        exec(win || emptyFunk, lose || emptyFunk, "LiveTiles", "deleteSecondaryTile", [options]);
     }
+};
 
-    var cdv = window.cordova || window.Cordova;
-        navigator.plugins.liveTiles = {
-            updateAppTile: function (successCallback, errorCallback, options) {
-                if(checkArgs(successCallback, errorCallback)) {
-                    cdv.exec(successCallback, errorCallback, "LiveTiles", "updateAppTile", [options]);
-                }
-            },
-
-            createSecondaryTile: function (successCallback, errorCallback, options) {
-                if(checkArgs(successCallback, errorCallback)) {
-                    cdv.exec(successCallback, errorCallback, "LiveTiles", "createSecondaryTile", [options]);
-                }
-            },
-
-            updateSecondaryTile: function (successCallback, errorCallback, options) {
-                if(checkArgs(successCallback, errorCallback)) {
-                    cdv.exec(successCallback, errorCallback, "LiveTiles", "updateSecondaryTile", [options]);
-                }
-            },
-
-            deleteSecondaryTile: function (successCallback, errorCallback, options) {
-                if(checkArgs(successCallback, errorCallback)) {
-                    cdv.exec(successCallback, errorCallback, "LiveTiles", "deleteSecondaryTile", [options]);
-                }
-            }
-
-        };
-
-})();
