@@ -19,9 +19,19 @@ From a local clone:
 To install using cordova-cli
 ---
 
+From plugin registry:
 
-   	
+	$ cordova plugin add com.risingj.cordova.livetiles
 
+From the repo:
+
+	$ cordova plugin add https://github.com/purplecabbage/livetiles.git
+
+From a local clone:
+
+	$ cordova plugin add #path_to_local_clone#		
+
+   
 
 Somewhere in your code, after device ready has fired 
 ---
