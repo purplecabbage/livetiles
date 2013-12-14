@@ -1,21 +1,15 @@
-﻿/*
- * PhoneGap is available under *either* the terms of the modified BSD license *or* the
- * MIT License (2008). See http://opensource.org/licenses/alphabetical for full text.
- *
- * Copyright (c) 2005-2011, Nitobi Software Inc.
- * Copyright (c) 2011, Microsoft Corporation
- */
+﻿
 
 using System.Runtime.Serialization;
-using WP7CordovaClassLib.Cordova;
-using WP7CordovaClassLib.Cordova.Commands;
-using WP7CordovaClassLib.Cordova.JSON;
 using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Phone.Controls;
 using System.Windows;
+using WPCordovaClassLib.Cordova.Commands;
+using WPCordovaClassLib.Cordova.JSON;
+using WPCordovaClassLib.Cordova;
 
 namespace Cordova.Extension.Commands
 {
@@ -84,14 +78,17 @@ namespace Cordova.Extension.Commands
         /// </summary>
         public void updateAppTile(string options)
         {
+            string[] args = JsonHelper.Deserialize<string[]>(options);
+            string callbackId = args[1];
+
             LiveTilesOptions liveTileOptions;
             try
             {
-                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions[]>(options)[0];
+                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions>(args[0]);
             }
             catch (Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
                 return;
             }
 
@@ -103,16 +100,16 @@ namespace Cordova.Extension.Commands
                 {
                     StandardTileData standardTile = CreateTileData(liveTileOptions);
                     appTile.Update(standardTile);
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK), callbackId);
                 }
                 else
                 {
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Can't get application tile"));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Can't get application tile"), callbackId);
                 }
             }
             catch(Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error updating application tile"));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error updating application tile"), callbackId);
             }
         }
 
@@ -121,20 +118,23 @@ namespace Cordova.Extension.Commands
         /// </summary>
         public void createSecondaryTile(string options)
         {
+            string[] args = JsonHelper.Deserialize<string[]>(options);
+            string callbackId = args[1];
+
             LiveTilesOptions liveTileOptions;
             try
             {
-                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions[]>(options)[0];
+                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions>(args[0]);
             }
             catch (Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
                 return;
             }
 
             if (string.IsNullOrEmpty(liveTileOptions.Title) || string.IsNullOrEmpty(liveTileOptions.Image) || string.IsNullOrEmpty(liveTileOptions.SecondaryTileUri))
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
                 return;
             }
             try
@@ -149,7 +149,7 @@ namespace Cordova.Extension.Commands
                         currentPage = ((PhoneApplicationFrame)Application.Current.RootVisual).Content as PhoneApplicationPage;
                         string currentUri = currentPage.NavigationService.Source.ToString().Split('?')[0];
                         ShellTile.Create(new Uri(currentUri + "?Uri=" + liveTileOptions.SecondaryTileUri, UriKind.Relative), secondaryTile);
-                        DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
+                        DispatchCommandResult(new PluginResult(PluginResult.Status.OK), callbackId);
                     });                                                            
                 }
                 else
@@ -159,7 +159,7 @@ namespace Cordova.Extension.Commands
             }
             catch (Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR,"Error creating secondary live tile"));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error creating secondary live tile"), callbackId);
             }
         }
 
@@ -168,20 +168,23 @@ namespace Cordova.Extension.Commands
         /// </summary>
         public void updateSecondaryTile(string options)
         {
+            string[] args = JsonHelper.Deserialize<string[]>(options);
+            string callbackId = args[1];
+
             LiveTilesOptions liveTileOptions;
             try
             {
-                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions[]>(options)[0];
+                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions>(args[0]);
             }
             catch (Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
                 return;
             }
 
             if (string.IsNullOrEmpty(liveTileOptions.SecondaryTileUri))
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
                 return;
             }
 
@@ -193,16 +196,16 @@ namespace Cordova.Extension.Commands
                 {
                     StandardTileData liveTile = this.CreateTileData(liveTileOptions);
                     foundTile.Update(liveTile);
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK), callbackId);
                 }
                 else
                 {
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Can't get secondary live tile"));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Can't get secondary live tile"), callbackId);
                 }
             }
             catch (Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR,"Error updating secondary live tile"));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error updating secondary live tile"), callbackId);
             }
         }
 
@@ -211,20 +214,23 @@ namespace Cordova.Extension.Commands
         /// </summary>
         public void deleteSecondaryTile(string options)
         {
+            string[] args = JsonHelper.Deserialize<string[]>(options);
+            string callbackId = args[1];
+
             LiveTilesOptions liveTileOptions;
             try
             {
-                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions[]>(options)[0];
+                liveTileOptions = JsonHelper.Deserialize<LiveTilesOptions>(args[0]);
             }
             catch (Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
                 return;
             }
 
             if (string.IsNullOrEmpty(liveTileOptions.SecondaryTileUri))
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.JSON_EXCEPTION), callbackId);
                 return;
             }
             try
@@ -233,16 +239,16 @@ namespace Cordova.Extension.Commands
                 if (foundTile != null)
                 {
                     foundTile.Delete();
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.OK), callbackId);
                 }
                 else
                 {
-                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Can't get secondary live tile"));
+                    DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Can't get secondary live tile"), callbackId);
                 }   
             }
             catch (Exception)
             {
-                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error deleting secondary live tile"));
+                DispatchCommandResult(new PluginResult(PluginResult.Status.ERROR, "Error deleting secondary live tile"), callbackId);
             }
         }
 
